@@ -23,12 +23,12 @@ public class SaveDTO {
 	private Timestamp createdAt;
 	private Integer user_id;
 	
-	public Account toAccount(Integer userid) {
+	public Account toAccount(Integer principalId) {
 		return Account.builder()
 					  .number(this.number)
 					  .password(this.password)
 					  .balance(this.balance)
-					  .userId(userid)
+					  .userId(principalId)
 					  .build();
 	}
 }
