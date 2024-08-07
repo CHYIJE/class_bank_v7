@@ -31,6 +31,7 @@ public class UserController {
 
 	@GetMapping("/sign-up")
 	public String signUpPage() {
+		
 		// prefix: WEB-INF/view
 		// suffix: .jsp
 		// return: user/signUp
