@@ -7,7 +7,7 @@
 	<!-- id는 매칭되어 있는 인터페이스에 메서드 명과 같아야한다. -->
 	<insert id="insert">
 		insert into account_tb(number, password, balance, user_id, created_at)
-		values ( #{number}, #{password}, #{balance}, #{userId}, #{createdAt})
+		values ( #{number}, #{password}, #{balance}, #{userId}, now())
 	</insert>
 	
 	<update id="updateById">
