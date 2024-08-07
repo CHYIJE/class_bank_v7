@@ -1,7 +1,5 @@
 package com.tenco.bank.service;
 
-import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -12,7 +10,6 @@ import com.tenco.bank.dto.SaveDTO;
 import com.tenco.bank.handler.exception.DataDeliveryException;
 import com.tenco.bank.handler.exception.RedirectException;
 import com.tenco.bank.repository.interfaces.AccountRepository;
-import com.tenco.bank.repository.model.User;
 
 @Service
 public class AccountService {

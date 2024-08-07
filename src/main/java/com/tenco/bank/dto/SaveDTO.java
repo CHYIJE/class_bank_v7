@@ -28,7 +28,7 @@ public class SaveDTO {
 					  .number(this.number)
 					  .password(this.password)
 					  .balance(this.balance)
-					  .userId(1)
+					  .userId(userid)
 					  .build();
 	}
 }
