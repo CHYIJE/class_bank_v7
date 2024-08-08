@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tenco.bank.dto.DepositDTO;
 import com.tenco.bank.dto.SaveDTO;
 import com.tenco.bank.dto.withdrawalDTO;
 import com.tenco.bank.handler.exception.DataDeliveryException;
@@ -116,6 +117,39 @@ public class AccountService {
 		if(rowResultCount != 1) {
 			throw new DataDeliveryException(Define.FAILED_PROCESSING, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	// 입금 기능 만들기
+	// 1. 계좌 확인 ㄱ 
+	// 2.
+	// 3.
+	// 4.
+	// 5.
+	@Transactional
+	public void updateAccountDeposit(DepositDTO dto, Integer principalId) {
+		Account accountEntity = accountRepository.findByNumber(dto.getDAccountNumber());
+		if (accountEntity == null) {
+			throw new DataDeliveryException(Define.NOT_EXIST_ACCOUNT, HttpStatus.BAD_REQUEST);
+		}
+
+		//  입금 기능
+		
+		accountEntity.deposit(dto.getAmount());
+		// update 처리
+		accountRepository.updateById(accountEntity);
+		
+		History history = new History();
+		history.setAmount(dto.getAmount());
+		history.setWBalance(null);
+		history.setDBalance(accountEntity.getBalance());
+		history.setWAccountId(null);
+		history.setDAccountId(principalId);
+		
+		int rowResultCount = historyRepository.insert(history);
+		if(rowResultCount != 1) {
+			throw new DataDeliveryException(Define.FAILED_PROCESSING, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
 	}
 	
 }

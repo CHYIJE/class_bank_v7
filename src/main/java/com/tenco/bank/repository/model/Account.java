@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 
 import org.springframework.http.HttpStatus;
 
-import com.tenco.bank.dto.withdrawalDTO;
 import com.tenco.bank.handler.exception.DataDeliveryException;
 import com.tenco.bank.handler.exception.UnAuthorizedException;
 import com.tenco.bank.utils.Define;
