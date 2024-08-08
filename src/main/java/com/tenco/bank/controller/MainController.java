@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tenco.bank.handler.exception.DataDeliveryException;
 import com.tenco.bank.handler.exception.RedirectException;
 import com.tenco.bank.handler.exception.UnAuthorizedException;
+import com.tenco.bank.utils.Define;
 
 @Controller // Ioc 대상(싱그톤 패턴 관리가 된다.) --> 제어의 역전
 public class MainController {
@@ -39,7 +40,7 @@ public class MainController {
 		System.out.println("-------------");
 		System.out.println("isError: " + isError);
 		if (isError) {
-			throw new RedirectException("잘못된 요청입니다.", HttpStatus.NOT_FOUND);
+			throw new RedirectException(Define.INVALID_INPUT, HttpStatus.NOT_FOUND);
 		}
 		return "main";
 	}
@@ -48,7 +49,7 @@ public class MainController {
 	@GetMapping("error-test2")
 	public String errorData() {
 		if (true) {
-			throw new DataDeliveryException("잘못된 데이터입니다..", HttpStatus.BAD_REQUEST);
+			throw new DataDeliveryException(Define.INVALID_INPUT, HttpStatus.BAD_REQUEST);
 		}
 		return "main";
 	}
@@ -57,7 +58,7 @@ public class MainController {
 	@GetMapping("error-test3")
 	public String errorData3() {
 		if (true) {
-			throw new UnAuthorizedException("인증 안된 사용자 입니다.", HttpStatus.BAD_REQUEST);
+			throw new UnAuthorizedException(Define.NOT_AN_AUTHENTICATED_USER, HttpStatus.BAD_REQUEST);
 		}
 		return "main";
 	}

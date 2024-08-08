@@ -15,6 +15,7 @@
 							  password = #{password},
 							  balance = #{balance},
 							  user_id = #{userId}
+							  where id = #{id}
 	</update>
 	
 	<delete id="deletById">
