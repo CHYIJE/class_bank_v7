@@ -49,7 +49,7 @@ public class Account {
 	// 잔액 여부 확인
 	public void checkBalance(Long amount) {
 		if(this.balance < amount) {
-			throw new DataDeliveryException(Define.ENTER_YOUR_BALANCE, HttpStatus.BAD_REQUEST);
+			throw new DataDeliveryException(Define.LACK_Of_BALANCE, HttpStatus.BAD_REQUEST);
 		}
 	}
 	

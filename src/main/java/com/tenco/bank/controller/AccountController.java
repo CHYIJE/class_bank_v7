@@ -135,10 +135,10 @@ public class AccountController {
 		if(dto.getAmount().longValue() <= 0) {
 			throw new DataDeliveryException(Define.W_BALANCE_VALUE, HttpStatus.BAD_REQUEST);
 		}
-		if(dto.getAmount() == null) {
+		if(dto.getWAccountNumber() == null) {
 			throw new DataDeliveryException(Define.ENTER_YOUR_ACCOUNT_NUMBER, HttpStatus.BAD_REQUEST);
 		}
-		if(dto.getAmount() == null || dto.getWAccountPassword().isEmpty()) {
+		if(dto.getWAccountPassword() == null || dto.getWAccountPassword().isEmpty()) {
 			throw new DataDeliveryException(Define.ENTER_YOUR_PASSWORD, HttpStatus.BAD_REQUEST);
 		}
 		
