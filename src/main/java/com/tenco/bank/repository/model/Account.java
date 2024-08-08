@@ -37,24 +37,25 @@ public class Account {
 	public void deposit(Long amount) {
 		this.balance += amount;
 	}
+
 	// 패스워드 체크
 	public void checkPassword(String password) {
-		// 		f						  ==   f  일때 --> true
-		if(this.password.equals(password) == false) {
+		// f == f 일때 --> true
+		if (this.password.equals(password) == false) {
 			throw new DataDeliveryException(Define.FAIL_ACCOUNT_PASSWROD, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	// 잔액 여부 확인
 	public void checkBalance(Long amount) {
-		if(this.balance < amount) {
+		if (this.balance < amount) {
 			throw new DataDeliveryException(Define.LACK_Of_BALANCE, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	// 계좌 소유자 확인 기능
 	public void checkOwner(Integer principalId) {
-		if(this.userId != principalId) {
+		if (this.userId != principalId) {
 			throw new UnAuthorizedException(Define.NOT_ACCOUNT_OWNER, HttpStatus.UNAUTHORIZED);
 		}
 	}
