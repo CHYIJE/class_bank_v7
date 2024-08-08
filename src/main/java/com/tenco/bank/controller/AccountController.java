@@ -181,7 +181,7 @@ public class AccountController {
 
 	// 이체 페이지 요청
 	@GetMapping("/transfer")
-	public String transeFerPage() {
+	public String transeferPage() {
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
 		if (principal == null) {
 			throw new UnAuthorizedException(Define.NOT_AN_AUTHENTICATED_USER, HttpStatus.UNAUTHORIZED);
