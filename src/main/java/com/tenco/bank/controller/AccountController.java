@@ -228,7 +228,10 @@ public class AccountController {
 	 */
 	@GetMapping("/detail/{accountId}")
 	public String detail(@PathVariable(name = "accountId") Integer accountId,
-			@RequestParam(required = false, name = "type") String type, Model model) {
+						 @RequestParam(required = false, name = "type") String type,
+						 @RequestParam(name = "page", defaultValue = "1" ) int page,
+						 @RequestParam(name = "size", defaultValue = "2" ) int size,
+						 Model model) {
 		// 1. 인증검사 추후 추가
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
 		if (principal == null) {
@@ -241,13 +244,30 @@ public class AccountController {
 		if (!validTypes.contains(type)) {
 			throw new DataDeliveryException("유효하지 않은 접근입니다.", HttpStatus.BAD_REQUEST);
 		}
+		
+		// 페이지 개수를 계산하기 위해서 총 페이지 수를 계산해주어야 한다.
+		int totalRecords = accountService.countHistoryByAccountIdAndType(type, accountId);
+		int totalPages = (int)Math.ceil((double)totalRecords / size);
+		
 		// 쿼리를 두번 던지지만 한방 쿼릴로 하는것이 서버 자원을 아낄 수 있다.
 		Account account = accountService.readAccountById(accountId);
-		List<HistoryAccount> historyList = accountService.readHistoryByAccountId(type, accountId);
+		List<HistoryAccount> historyList = accountService.readHistoryByAccountId(type, accountId, page, size);
 
 		model.addAttribute("account", account);
 		model.addAttribute("historyList", historyList);
-
+		
+		model.addAttribute("currentPage", page);
+		System.out.println("page : "+page);
+		
+		model.addAttribute("totalPages", totalPages);
+		System.out.println("totalPages : "+totalPages);
+		
+		model.addAttribute("type", type);
+		System.out.println("type : "+type);
+		
+		model.addAttribute("size", size);
+		System.out.println("size : "+size);
+		
 		return "account/detail";
 	}
 
