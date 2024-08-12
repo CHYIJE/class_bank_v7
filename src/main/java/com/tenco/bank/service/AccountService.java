@@ -1,5 +1,6 @@
 package com.tenco.bank.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.tenco.bank.repository.interfaces.AccountRepository;
 import com.tenco.bank.repository.interfaces.HistoryRepository;
 import com.tenco.bank.repository.model.Account;
 import com.tenco.bank.repository.model.History;
+import com.tenco.bank.repository.model.HistoryAccount;
 import com.tenco.bank.utils.Define;
 
 @Service
@@ -198,13 +200,41 @@ public class AccountService {
 		history.setDBalance(depoAccountEntity.getBalance());
 		history.setWAccountId(principalId);
 		history.setDAccountId(depoAccountEntity.getId());
-		
+
 		// 결과히스토리 확인
 		int rowResultCount = historyRepository.insert(history);
 		System.out.println("histoiry 확인" + history);
 		if (rowResultCount != 1) {
 			throw new DataDeliveryException(Define.FAILED_PROCESSING, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	/**
+	 * 단일 계좌 조회 기능
+	 * 
+	 * @param accountId (pk)
+	 * @return
+	 */
+	public Account readAccountById(Integer accountId) {
+		Account accountEntity = accountRepository.findByAccountId(accountId);
+		if (accountEntity == null) {
+			throw new DataDeliveryException(Define.NOT_EXIST_ACCOUNT, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return accountEntity;
+	}
+
+	/**
+	 * 단일 계좌 거래내역 조회
+	 * 
+	 * @param type      = [all, deposit, withdrawal]
+	 * @param accountId (pk)
+	 * @return 전체, 입금, 출금 거래내역(3가지 타입 반환)
+	 */
+	// @Transactional \셀랙문은 트랜잭션 안거는데 이건 업데이트, 딜리트가 많아서 하는게 좋음\
+	public List<HistoryAccount> readHistoryByAccountId(String type, Integer accountId) {
+		List<HistoryAccount> list = new ArrayList<>();
+		list = historyRepository.findByAccountIdAndTypeOfHistory(type, accountId);
+		return list;
 	}
 
 }
