@@ -23,7 +23,7 @@
 					<c:forEach var="account" items="${accountList}">
 						<tr>
 							<td><a href="/account/detail/${account.id}?type=all">${account.number}</a></td>
-							<td>${account.formatKoreanWon(account.balance)}</td>
+							<td><fmt:formatNumber value="${account.balance}" pattern=" #,### 원"/></td>
 						</tr>
 					</c:forEach>
 				</tbody>
