@@ -9,7 +9,7 @@
 	<h5>Bank App에 오신걸 환영합니다</h5>
 	<div class="bg-light p-md-5">
 		<div class="user--box">
-			${princiapl.username}님 계좌<br> 계좌번호 : ${account.number} <br> 잔액 : ${account.balance}원
+			${princiapl.username}님 계좌<br> 계좌번호 : ${account.number} <br> 잔액 : ${account.formatKoreanWon(account.balance)}원
 		</div>
 		<br>
 		<div>
@@ -28,13 +28,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="history" items= "${historyList}">
+				<c:forEach var="historyAccount" items= "${historyList}">
 				<tr>
-					<th>${history.createdAt}</th>
-					<th>${history.sender}</th>
-					<th>${history.receiver}</th>
-					<th>${history.amount}</th>
-					<th>${history.balance}</th>
+					<th>${historyAccount.timeStampToString(historyAccount.createdAt)}</th>
+					<th>${historyAccount.sender}</th>
+					<th>${historyAccount.receiver}</th>
+					<th>${account.formatKoreanWon(historyAccount.amount)}</th>
+					<th>${account.formatKoreanWon(historyAccount.balance)}</th>
 				</tr>
 				</c:forEach>
 			</tbody>
