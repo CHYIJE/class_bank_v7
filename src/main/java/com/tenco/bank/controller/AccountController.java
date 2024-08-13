@@ -27,20 +27,23 @@ import com.tenco.bank.service.AccountService;
 import com.tenco.bank.utils.Define;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Controller // IoC 대상(싱글톤으로 관리)
 @RequestMapping("/account")
+@RequiredArgsConstructor
 public class AccountController {
 
 	// 계좌 생성 화면 요청 - DI 처리
 	private final AccountService accountService;
 	private final HttpSession session;
-
-	// @Autowired
-	public AccountController(AccountService accountService, HttpSession session) {
-		this.accountService = accountService;
-		this.session = session;
-	}
+	
+//	@RequiredArgsConstructor 와 같은 기능이다. ▽ 안쓸꺼면 밑처럼 해줘야함 ^^ 
+//	// @Autowired    
+//	public AccountController(AccountService accountService, HttpSession session) {
+//		this.accountService = accountService;
+//		this.session = session;
+//	}
 
 	/**
 	 * 계좌 생성 페이지 요청 주소 설계 : http://localhost:8080/account/save

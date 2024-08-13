@@ -44,7 +44,7 @@ public class AuthIntercepter implements HandlerInterceptor{
 	
 	
 	// afterCompletion
-	// 요청 처리가 완료도니 후, 즉 뷰가 완전 렌덜이 된 후 에 호출 된다.
+	// 요청 처리가 완료된 후, 즉 뷰가 완전 렌덜이 된 후 에 호출 된다.
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
