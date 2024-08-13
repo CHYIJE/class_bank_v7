@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/user") // 대문 처리
 public class UserController {
 
-	private UserService userService;
+	private final UserService userService;
 	private final HttpSession session;
 
 	// DI처리
