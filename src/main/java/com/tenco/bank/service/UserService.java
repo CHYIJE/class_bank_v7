@@ -103,6 +103,13 @@ public class UserService {
 		return userEntity; 
 	}
 	
+	/**
+	 * 서버 운영체제에 파일 업로드 기능
+	 * MultipartFile getOriginalFilename : 사용자가 작성한 파일 명 
+	 * uploadFileName : 서버 컴퓨터에 저장 될 파일 명 
+	 * @param mFile
+	 * @return
+	 */
 	private String[] uploadFile(MultipartFile mFile) {
 		
 		if(mFile.getSize() > Define.MAX_FILE_SIZE) {
