@@ -1,11 +1,16 @@
 package com.tenco.bank.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tenco.bank.dto.SignInDTO;
 import com.tenco.bank.dto.SignUpDTO;
@@ -35,10 +40,17 @@ public class UserService {
 	 */
 	@Transactional  // 트랜잭션 처리는 반드시 습관화
 	public void createUser(SignUpDTO dto) {
-		
-		
 		int result = 0;
-
+		
+		System.out.println(dto.getMFile().getOriginalFilename());
+		
+		if(!dto.getMFile().isEmpty()) {
+			// 파일 업로드 로직 구현
+			String[] fileNames = uploadFile(dto.getMFile());
+			dto.setOriginFileName(fileNames[0]);
+			dto.setUploadFileName(fileNames[1]);
+		}
+		
 		try {
 			// 코드 추가 부분
 			// 회원가입 요청시 사용자가 던진 비밀번호 값ㅇ르 암호화 처리 해야 함
@@ -58,6 +70,8 @@ public class UserService {
 		}
 	}
 	
+	
+
 	public User readUser(SignInDTO dto) {
 		// 유효성 검사는 Controller에서 먼저 하자.
 		User userEntity = null; // 지역 변수 선언
@@ -88,4 +102,37 @@ public class UserService {
 		
 		return userEntity; 
 	}
+	
+	private String[] uploadFile(MultipartFile mFile) {
+		
+		if(mFile.getSize() > Define.MAX_FILE_SIZE) {
+			throw new DataDeliveryException("파일 크기는 20MB 이상 클 수 없습니다.", HttpStatus.BAD_REQUEST);
+		}
+		// 서버 컴퓨터에 파일을 넣을 디렉토리가 있는지 검사
+		String saveDirectory = Define.UPLOAD_FILE_DERECTORY;
+		File directory = new File(saveDirectory);
+		if(!directory.exists()) {
+			directory.mkdir();
+		}
+		
+		// 파일 이름 생성(중복 이름 예방)
+		String uploadFileName = UUID.randomUUID() + "_" + mFile.getOriginalFilename();
+		// 파일 전체경로 + 새로 생성한 파일명  /File.separator/ 환경에 따라 무조건 넣어라
+		String uploadPath = saveDirectory + File.separator + uploadFileName;
+		System.out.println("-------------------");
+		System.out.println(uploadPath);
+		System.out.println("-------------------");
+		File destination = new File(uploadPath);
+		
+		// 반드시 수행
+		try {
+			mFile.transferTo(destination);
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+			throw new DataDeliveryException("파일 업로드중에 오류가 발생 했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new String[] {mFile.getOriginalFilename(), uploadFileName};
+	}
+	
 }
