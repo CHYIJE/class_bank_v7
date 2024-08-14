@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ import com.tenco.bank.utils.Define;
 
 import lombok.RequiredArgsConstructor;
 
+
 @Service // IoC 대상 (싱글톤으로 관리)
 @RequiredArgsConstructor
 public class UserService {
@@ -30,6 +32,10 @@ public class UserService {
 	private final UserRepository userRepository;
 	@Autowired
 	private final PasswordEncoder passwordEncoder;
+	
+	// 초기 파라메터 가져오는 방법
+	@Value("${file.upload-dir}")
+	private String uploadDir;
 	
 	
 
@@ -115,17 +121,18 @@ public class UserService {
 		if(mFile.getSize() > Define.MAX_FILE_SIZE) {
 			throw new DataDeliveryException("파일 크기는 20MB 이상 클 수 없습니다.", HttpStatus.BAD_REQUEST);
 		}
-		// 서버 컴퓨터에 파일을 넣을 디렉토리가 있는지 검사
-		String saveDirectory = Define.UPLOAD_FILE_DERECTORY;
-		File directory = new File(saveDirectory);
-		if(!directory.exists()) {
-			directory.mkdir();
-		}
+		
+		// 코드 수정
+		// File - getAbsolutePath() : 파일 시스템의 절대 경로를 나타냅니다.
+		// (리눅스 또는 MacOS)에 맞춰서 절대 경로가 생성을 시킬 수 있다.
+		//String savaeDirectory = new File(uploadDir).getAbsolutePath();
+		String savaeDirectory = uploadDir;
+		System.out.println("savaeDirectory : " + savaeDirectory);
 		
 		// 파일 이름 생성(중복 이름 예방)
 		String uploadFileName = UUID.randomUUID() + "_" + mFile.getOriginalFilename();
 		// 파일 전체경로 + 새로 생성한 파일명  /File.separator/ 환경에 따라 무조건 넣어라
-		String uploadPath = saveDirectory + File.separator + uploadFileName;
+		String uploadPath = savaeDirectory + File.separator + uploadFileName;
 		System.out.println("-------------------");
 		System.out.println(uploadPath);
 		System.out.println("-------------------");
