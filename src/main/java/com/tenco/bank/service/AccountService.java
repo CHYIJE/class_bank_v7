@@ -250,4 +250,14 @@ public class AccountService {
 		return historyRepository.countByAccountIdAndType(type, accountId);
 	}
 
+	public List<Account> readAccountListByUserIdForPage(Integer id, int limit, int offset) {
+		List<Account> list = accountRepository.findByAccountIdForPage(id, limit, offset);
+		
+		return list;
+	}
+	
+	
+	
+	
+
 }

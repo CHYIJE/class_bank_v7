@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tenco.bank.dto.SignInDTO;
 import com.tenco.bank.dto.SignUpDTO;
@@ -122,5 +123,14 @@ public class UserController {
 		session.invalidate();  // 로그아웃 됨
 		return "redirect:/user/sign-in";
 	}
+	
+	@GetMapping("/kakao")
+	public String getMethodName(@RequestParam("code") String code) {
+		System.out.println("------------");
+		System.out.println(code);
+		System.out.println("------------");
+		return new String();
+	}
+	
 
 }

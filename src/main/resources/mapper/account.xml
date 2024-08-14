@@ -34,6 +34,11 @@
 		select * from account_tb where id = #{accountId}
 	</select>
 	
+	<select id="findByAccountIdForPage" resultType="com.tenco.bank.repository.model.Account">
+		select * from account_tb where user_id = #{userId}
+		limit #{limit} offset #{offset}
+	</select>
+	
 	
 	
 </mapper>

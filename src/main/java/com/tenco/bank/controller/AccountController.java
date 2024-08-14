@@ -86,16 +86,23 @@ public class AccountController {
 	 * @return
 	 */
 	@GetMapping({ "/list", "/" })
-	private String listPage(Model model, @SessionAttribute(Define.PRINCIPAL) User principal) {
-
+	private String listPage(Model model, 
+			@RequestParam(name="currentPage", defaultValue = "1") Integer currentPage,
+			@SessionAttribute(Define.PRINCIPAL) User principal) {
+		
 		// 2. 유효성 검사
 		// 3. 서비스 호출
-		List<Account> accountList = accountService.readAccountListByUserId(principal.getId());
+		// List<Account> accountList = accountService.readAccountListByUserId(principal.getId());
+		int totalNum = accountService.readAccountListByUserId(principal.getId()).size();
+		Integer totalPage = (int)Math.ceil((double)totalNum / 2);
+		Integer offset = (currentPage * 2) -1; 
+		List<Account> accountList = accountService.readAccountListByUserIdForPage(principal.getId(), 2, offset);
 		if (accountList.isEmpty()) {
 			model.addAttribute("accountList", null);
 		} else {
 			model.addAttribute("accountList", accountList);
-		}
+			model.addAttribute("totalPage", totalPage);
+		} 
 
 		return "account/list";
 		// JSP 데이트를 넣어 주는 방법

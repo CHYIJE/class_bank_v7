@@ -26,4 +26,8 @@ public interface AccountRepository {
 	// 코드 추가 예정
 	public Account findByAccountId(Integer accountId);
 	
+	public List<Account> findByAccountIdForPage(@Param("userId")Integer principalId, 
+												@Param("limit")Integer limit,
+												@Param("offset")Integer offset);
+	
 }

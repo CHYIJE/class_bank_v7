@@ -28,6 +28,9 @@
 					</c:forEach>
 				</tbody>
 			</table>
+			<c:forEach var="page" begin="1" end="${totalPage}">
+				<a href="?currentPage=${page}">${page}</a>
+			</c:forEach>
 		</c:when>
 		<c:otherwise>
 			<div class="jumbotron display-4">
