@@ -51,3 +51,6 @@ logging:
 #초기 파라메터 설정
 file:
   upload-dir: C:\\work_spring\\upload/
+  
+tenco:
+  key: 38b388bf3e29c3feab3c7be6832061809086cf172d333dccb1e88b2a
