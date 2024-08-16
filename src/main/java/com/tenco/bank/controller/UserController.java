@@ -1,12 +1,20 @@
 package com.tenco.bank.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import com.tenco.bank.dto.SignInDTO;
 import com.tenco.bank.dto.SignUpDTO;
@@ -125,12 +133,40 @@ public class UserController {
 	}
 	
 	@GetMapping("/kakao")
+	@ResponseBody //@RestController = @Controller + @ ResponseBody
 	public String getMethodName(@RequestParam("code") String code) {
-		System.out.println("------------");
 		System.out.println(code);
-		System.out.println("------------");
-		return new String();
+		
+		// POST - 카카오 토큰 요청 받기
+		// Header, body 구성
+		RestTemplate rt1 = new RestTemplate();
+		// 헤더 구성
+		HttpHeaders header1 = new HttpHeaders();
+		header1.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		// 바디 구성
+		MultiValueMap<String, String> params1 = new LinkedMultiValueMap<String, String>();
+		params1.add("grant_type", "authorization_code");
+		params1.add("client_id", "ae7c97b7d1b43bc5ffa24d2956b1febf");
+		params1.add("redirect_uri", "http://localhost:8080/user/kakao");
+		params1.add("code", code);
+		
+		// 헤더 + 바디 결합
+		HttpEntity<MultiValueMap<String, String>> reqkakaMessage
+			= new HttpEntity<>(params1, header1);
+		
+		// 통신 요청
+		ResponseEntity<String> response = rt1.exchange("https://kauth.kakao.com/oauth/token", 
+				HttpMethod.POST, reqkakaMessage, String.class);
+		
+		System.out.println("response : " + response);
+		
+		
+		return response.getBody().toString();
 	}
+	
+	
+	
+	
 	
 
 }
