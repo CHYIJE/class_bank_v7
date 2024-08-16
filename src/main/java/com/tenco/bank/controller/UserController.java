@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.tenco.bank.dto.OAuthToken;
 import com.tenco.bank.dto.SignInDTO;
 import com.tenco.bank.dto.SignUpDTO;
 import com.tenco.bank.handler.exception.DataDeliveryException;
@@ -155,13 +156,29 @@ public class UserController {
 			= new HttpEntity<>(params1, header1);
 		
 		// 통신 요청
-		ResponseEntity<String> response = rt1.exchange("https://kauth.kakao.com/oauth/token", 
-				HttpMethod.POST, reqkakaMessage, String.class);
+		ResponseEntity<OAuthToken> response1 = rt1.exchange("https://kauth.kakao.com/oauth/token", 
+				HttpMethod.POST, reqkakaMessage, OAuthToken.class);
+		System.out.println("response : " + response1.getBody().toString());
 		
-		System.out.println("response : " + response);
+		// 카카오 리소스 서버 사용자 정보 가져오기
+		RestTemplate rt2 = new RestTemplate();
+		// 헤더
+		HttpHeaders headers2 = new HttpHeaders();
+		// 반드시 Bearer 다음에 공백 한 칸 추가
+		headers2.add("Authorization", "Bearer " + response1.getBody().getAccessToken());
+		headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		// 본문 x 
 		
+		// Http Entity 만들기
+		HttpEntity<MultiValueMap<String, String>> reqKakoInfoMessage = new HttpEntity<>(headers2);
 		
-		return response.getBody().toString();
+		// 통신 요청
+		ResponseEntity<String> response2 = rt2.exchange("https://kapi.kakao.com/v2/user/me", HttpMethod.POST,
+				reqKakoInfoMessage, String.class);
+		
+		System.out.println("response2 : " + response2);
+		
+		return response2.getBody();
 	}
 	
 	
